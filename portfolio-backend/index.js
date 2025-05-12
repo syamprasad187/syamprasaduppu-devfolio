@@ -4,7 +4,14 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: 'https://syamprasaduppu-devfolio.vercel.app/',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 // Contact API
@@ -28,7 +35,8 @@ app.post('/api/contact', async (req, res) => {
 
     res.status(200).json({ success: true, message: 'Message sent!' });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error('Error sending email:', err);
+    res.status(500).json({ success: false, message: 'Error sending message.' });
   }
 });
 
